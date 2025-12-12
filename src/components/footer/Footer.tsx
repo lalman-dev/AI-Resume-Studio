@@ -22,7 +22,7 @@ const Footer = () => {
             transition={{ duration: 0.6, delay: idx * 0.2 }}
             viewport={{ once: true }}
           >
-            <p className="text-slate-100 font-semibold">{section.title}</p>
+            <p className="text-slate-400 font-medium">{section.title}</p>
             <ul className="mt-2 space-y-2">
               {section.links.map((link) => (
                 <li key={link.label}>
