@@ -2,7 +2,7 @@ import Home from "./pages/Home";
 import { Route, Routes } from "react-router-dom";
 import Layout from "./pages/Layout";
 import Dashboard from "./pages/Dashboard/Dashboard";
-import ResumeBuilder from "./pages/ResumeBuilder";
+import ResumeBuilder from "./pages/resumebuilder/ResumeBuilder";
 import Login from "./pages/Login";
 import Preview from "./pages/Preview";
 

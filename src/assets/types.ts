@@ -51,3 +51,20 @@ export interface Resume {
   updatedAt: string;
   createdAt: string;
 }
+
+export interface ResumeData {
+  _id: string;
+  title: string;
+  personal_info: any;
+  professional_summary: string;
+  experience: any[];
+  education: any[];
+  project: any[];
+  skills: string[];
+  template: "classic" | "modern" | "minimal" | "minimal-image";
+  accent_color: string;
+  public: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+  userId?: string;
+}
