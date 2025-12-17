@@ -70,7 +70,7 @@ const ExperienceForm: React.FC<ExperienceFormProps> = ({ data, onChange }) => {
           whileTap={{ scale: 0.95 }}
           type="button"
           onClick={addExperience}
-          className="flex items-center gap-2 px-3 py-1 text-sm bg-purple-100 text-purple-700 rounded hover:bg-purple-200 transition-colors"
+          className="flex items-center gap-2 px-3 py-1 text-sm bg-green-100 text-green-700 rounded hover:bg-green-200 transition-colors"
           aria-label="Add experience"
         >
           <Plus className="size-4" aria-hidden="true" />

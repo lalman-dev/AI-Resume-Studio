@@ -53,7 +53,7 @@ const ProjectsForm: React.FC<ProjectsFormProps> = ({ data, onChange }) => {
           whileTap={{ scale: 0.95 }}
           type="button"
           onClick={addProject}
-          className="flex items-center gap-2 px-3 py-1 text-sm bg-purple-100 text-purple-700 rounded hover:bg-purple-200"
+          className="flex items-center gap-2 px-3 py-1 text-sm bg-green-100 text-green-700 rounded hover:bg-green-200"
         >
           <Plus className="size-4" /> Add Your Project
         </motion.button>
