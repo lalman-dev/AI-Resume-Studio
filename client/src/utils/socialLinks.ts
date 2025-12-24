@@ -10,13 +10,13 @@ export interface SocialLink {
 export const socialLinks = [
   {
     id: "github",
-    href: "https://github.com/lalman-dv",
+    href: "https://github.com/lalman-dev",
     icon: Github,
     label: "GitHub",
   },
   {
     id: "linkedin",
-    href: "https://www.linkedin.com/in/lalman-lalman-34490a163/",
+    href: "https://www.linkedin.com/in/lalman-dev/",
     icon: Linkedin,
     label: "LinkedIn",
   },

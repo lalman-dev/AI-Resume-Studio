@@ -13,8 +13,13 @@ import { useNavigate } from "react-router-dom";
 import CreateResumeModal from "./CreateResumeModal";
 import UploadResumeModal from "./UploadResumeModal";
 import EditResumeModal from "./EditResumeModal";
+import { useAppSelector } from "../../app/hooks";
+import api from "../../configs/api";
+import toast from "react-hot-toast";
 
 const Dashboard = () => {
+  const { user, token } = useAppSelector((state) => state.auth);
+
   const [allResumes, setAllResumes] = useState<Resume[]>([]);
   const [showCreateResume, setShowCreateResume] = useState<boolean>(false);
   const [showUploadResume, setShowUploadResume] = useState<boolean>(false);
@@ -37,9 +42,33 @@ const Dashboard = () => {
   };
 
   const createResume = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    setShowCreateResume(false);
-    navigate(`/app/builder/resume123`);
+    try {
+      event.preventDefault();
+
+      const { data } = await api.post(
+        "/api/resumes/create",
+        { token },
+        { headers: { Authorization: token } }
+      );
+
+      setAllResumes([...allResumes, data.resume]);
+      setTitle("");
+      setShowCreateResume(false);
+      navigate(`/app/builder/${data.resume._id}`);
+    } catch (err: unknown) {
+      if (err && typeof err === "object" && "response" in err) {
+        const axiosError = err as {
+          response?: { data?: { message?: string } };
+        };
+        toast.error(
+          axiosError.response?.data?.message || "Something went wrong"
+        );
+      } else if (err instanceof Error) {
+        toast.error(err.message);
+      } else {
+        toast.error("Unexpected error occurred");
+      }
+    }
   };
 
   const uploadResume = async (event: React.FormEvent<HTMLFormElement>) => {

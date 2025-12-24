@@ -1,12 +1,14 @@
 import { useState } from "react";
-import logo from "../../../public/logo.png";
+import logo from "/logo.png";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { faqs } from "../../utils/faq";
 import { Menu, Video, X } from "lucide-react";
 import { Answer } from "./FaqAnswer";
+import { useAppSelector } from "../../app/hooks";
 
 const Hero = () => {
+  const { user } = useAppSelector((state) => state.auth);
   const [menuOpen, setMenuOpen] = useState(false);
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
@@ -55,14 +57,23 @@ const Hero = () => {
           <Link
             to="/app?state=register"
             className="px-6 py-2 bg-linear-to-r from-blue-300 to-blue-500 hover:from-blue-400 hover:to-blue-500 transition-all duration-300 hover:scale-105 active:scale-95 rounded-full border border-white text-white"
+            hidden={!!user}
           >
             Get Started
           </Link>
           <Link
             to="/app?state=login"
             className="px-6 py-2 bg-white hover:bg-gray-300 transition-all duration-300 hover:scale-110 active:scale-95 rounded-full border border-gray-400 hover:text-cyan-600"
+            hidden={!!user}
           >
             Login
+          </Link>
+          <Link
+            to="/app"
+            className="hidden md:block px-8 py-2 bg-purple-500 hover:bg-purple-600 active:scale-95 transition-all rounded-full text-white"
+            hidden={!user}
+          >
+            Dashboard
           </Link>
         </div>
 
@@ -176,7 +187,6 @@ const Hero = () => {
           ))}
         </div>
       </div>
-      
     </main>
   );
 };

@@ -8,6 +8,7 @@ import { useEffect } from "react";
 import api from "./configs/api";
 import { login, setLoading } from "./app/features/authSlice";
 import { useAppDispatch } from "./app/hooks";
+import { Toaster } from "react-hot-toast";
 
 interface User {
   id: string;
@@ -49,14 +50,17 @@ const App = () => {
   }, []);
 
   return (
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="app" element={<Layout />}>
-        <Route index element={<Dashboard />} />
-        <Route path="builder/:resumeId" element={<ResumeBuilder />} />
-      </Route>
-      <Route path="view/:resumeId" element={<Preview />} />
-    </Routes>
+    <>
+      <Toaster />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="app" element={<Layout />}>
+          <Route index element={<Dashboard />} />
+          <Route path="builder/:resumeId" element={<ResumeBuilder />} />
+        </Route>
+        <Route path="view/:resumeId" element={<Preview />} />
+      </Routes>
+    </>
   );
 };
 

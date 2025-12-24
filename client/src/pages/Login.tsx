@@ -1,6 +1,10 @@
 import { Lock, Mail, User2Icon } from "lucide-react";
 import { useState } from "react";
 import { motion } from "framer-motion";
+import api from "../configs/api";
+import { useDispatch } from "react-redux";
+import { login } from "../app/features/authSlice";
+import toast from "react-hot-toast";
 
 interface FormData {
   name: string;
@@ -9,6 +13,7 @@ interface FormData {
 }
 
 const Login = () => {
+  const dispatch = useDispatch();
   const query = new URLSearchParams(window.location.search);
   const urlState = query.get("state");
   const [state, setState] = useState<"login" | "register">(
@@ -21,9 +26,29 @@ const Login = () => {
     password: "",
   });
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // TODO: handle login/signup logic here
+
+    try {
+      const { data } = await api.post(`/api/users/${state}`, formData);
+      dispatch(login(data));
+      localStorage.setItem("token", data.token);
+      toast.success(data.message);
+    } catch (err: unknown) {
+      if (err && typeof err === "object" && "response" in err) {
+        const axiosError = err as {
+          response?: { data?: { message?: string } };
+        };
+        toast.error(
+          axiosError.response?.data?.message || "Something went wrong"
+        );
+      } else if (err instanceof Error) {
+        toast.error(err.message);
+      } else {
+        toast.error("Unexpected error occurred");
+      }
+    }
+
     console.log("Submitted:", formData);
   };
 
