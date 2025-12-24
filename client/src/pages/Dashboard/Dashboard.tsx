@@ -7,7 +7,6 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { dummyResumeData } from "../../assets/assets";
 import type { Resume } from "../../utils/types";
 import { useNavigate } from "react-router-dom";
 import CreateResumeModal from "./CreateResumeModal";
@@ -16,6 +15,8 @@ import EditResumeModal from "./EditResumeModal";
 import { useAppSelector } from "../../app/hooks";
 import api from "../../configs/api";
 import toast from "react-hot-toast";
+import pdfToText from "react-pdftotext";
+import { AxiosError } from "axios";
 
 const Dashboard = () => {
   const { user, token } = useAppSelector((state) => state.auth);
@@ -26,6 +27,7 @@ const Dashboard = () => {
   const [title, setTitle] = useState<string>("");
   const [resume, setResume] = useState<File | null>(null);
   const [editResumeId, setEditResumeId] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const navigate = useNavigate();
 
@@ -38,19 +40,32 @@ const Dashboard = () => {
   ];
 
   const loadAllResumes = async () => {
-    setAllResumes(dummyResumeData);
+    try {
+      const { data } = await api.get("/api/users/resumes", {
+        headers: { Authorization: token },
+      });
+      setAllResumes(data.resumes);
+    } catch (err: unknown) {
+      if (err instanceof AxiosError) {
+        toast.error(err.response?.data?.message || "Something went wrong");
+      } else if (err instanceof Error) {
+        toast.error(err.message);
+      } else {
+        toast.error("Unexpected error occurred");
+      }
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const createResume = async (event: React.FormEvent<HTMLFormElement>) => {
     try {
       event.preventDefault();
-
       const { data } = await api.post(
         "/api/resumes/create",
-        { token },
+        { title },
         { headers: { Authorization: token } }
       );
-
       setAllResumes([...allResumes, data.resume]);
       setTitle("");
       setShowCreateResume(false);
@@ -73,8 +88,34 @@ const Dashboard = () => {
 
   const uploadResume = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setShowUploadResume(false);
-    navigate(`/app/builder/resume123`);
+    setIsLoading(true);
+    try {
+      if (!resume) {
+        toast.error("Please upload a resume first");
+        setIsLoading(false);
+        return;
+      }
+      const resumeText = await pdfToText(resume);
+      const { data } = await api.post(
+        "/api/ai/upload-resume",
+        { title, resumeText },
+        { headers: { Authorization: token } }
+      );
+      setTitle("");
+      setResume(null);
+      setShowUploadResume(false);
+      navigate(`/app/builder/${data.resumeId}`);
+    } catch (err: unknown) {
+      if (err instanceof AxiosError) {
+        toast.error(err.response?.data?.message || "Something went wrong");
+      } else if (err instanceof Error) {
+        toast.error(err.message);
+      } else {
+        toast.error("Unexpected error occurred");
+      }
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const editTitle = async (event: React.FormEvent<HTMLFormElement>) => {
