@@ -13,9 +13,13 @@ import ProgressBar from "./ProgressBar";
 import SectionNavigation from "./SectionNavigation";
 import SectionContent from "./SectionContent";
 import ResumePreviewPanel from "./ResumePreviewPanel";
+import { useAppSelector } from "../../app/hooks";
+import api from "../../configs/api";
+import toast from "react-hot-toast";
 
 const ResumeBuilder: React.FC = () => {
   const { resumeId } = useParams<{ resumeId: string }>();
+  const { token } = useAppSelector((state) => state.auth);
 
   const [resumeData, setResumeData] = useState<ResumeData>({
     _id: "",
@@ -33,9 +37,22 @@ const ResumeBuilder: React.FC = () => {
     updatedAt: "",
     userId: "",
   });
+  const loadExistingResume = async () => {
+    try {
+      const { data } = await api.get("/api/resume/get/" + resumeId, {
+        headers: { Authorization: token },
+      });
+      if (data.resume) {
+        setResumeData(data.resume);
+        document.title = data.resume.title;
+      }
+    } catch (error:unknown) {
+      console.error(error.message);
+    }
+  };
 
-  const [activeSectionIndex, setActiveSectionIndex] = useState(0);
-  const [removeBackground, setRemoveBackGround] = useState(false);
+  const [activeSectionIndex, setActiveSectionIndex] = useState<number>(0);
+  const [removeBackground, setRemoveBackGround] = useState<boolean>(false);
 
   useEffect(() => {
     const resume = dummyResumeData.find((r) => r._id === resumeId);
@@ -46,7 +63,22 @@ const ResumeBuilder: React.FC = () => {
   }, [resumeId]);
 
   const changeResumeVisibility = async () => {
-    setResumeData({ ...resumeData, public: !resumeData.public });
+    try {
+      const formData = new FormData();
+      formData.append("resumeId", resumeId);
+      formData.append(
+        "resumeId",
+        JSON.stringify({ public: !resumeData.public })
+      );
+
+      const { data } = await api.put("/api/resumes/update" + formData, {
+        headers: { Authorization: token },
+      });
+      setResumeData({...resumeData, public:!resumeData.public})
+      toast.success(data.message)
+    } catch (error) {
+      console.error("Error saving resume:",error)
+    }
   };
 
   const handleShare = () => {

@@ -19,7 +19,7 @@ import pdfToText from "react-pdftotext";
 import { AxiosError } from "axios";
 
 const Dashboard = () => {
-  const { user, token } = useAppSelector((state) => state.auth);
+  const { token } = useAppSelector((state) => state.auth);
 
   const [allResumes, setAllResumes] = useState<Resume[]>([]);
   const [showCreateResume, setShowCreateResume] = useState<boolean>(false);
@@ -119,17 +119,51 @@ const Dashboard = () => {
   };
 
   const editTitle = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    setAllResumes((prev) =>
-      prev.map((r) => (r._id === editResumeId ? { ...r, title } : r))
-    );
-    setEditResumeId("");
-    setTitle("");
+    try {
+      event.preventDefault();
+      const { data } = await api.put(
+        "/api/resume/update",
+        { resumeId: editResumeId, resumeData: { title } },
+        { headers: { Authorization: token } }
+      );
+      setAllResumes(
+        allResumes.map((resume) =>
+          resume._id === editResumeId ? { ...resume, title } : resume
+        )
+      );
+      setTitle("");
+      setEditResumeId("");
+      toast.success(data.message);
+    } catch (err: unknown) {
+      if (err instanceof AxiosError) {
+        toast.error(err.response?.data?.message || "Something went wrong");
+      } else if (err instanceof Error) {
+        toast.error(err.message);
+      } else {
+        toast.error("Unexpected error occurred");
+      }
+    }
   };
 
   const deleteResume = async (resumeId: string) => {
-    if (window.confirm("Are you sure you want to delete this resume?")) {
-      setAllResumes((prev) => prev.filter((resume) => resume._id !== resumeId));
+    try {
+      if (window.confirm("Are you sure you want to delete this resume?")) {
+        const { data } = await api.delete(`/api/resumes/delete/${resumeId}`, {
+          headers: { Authorization: token },
+        });
+        setAllResumes((prev) =>
+          prev.filter((resume) => resume._id !== resumeId)
+        );
+        toast.success(data.message);
+      }
+    } catch (err: unknown) {
+      if (err instanceof AxiosError) {
+        toast.error(err.response?.data?.message || "Something went wrong");
+      } else if (err instanceof Error) {
+        toast.error(err.message);
+      } else {
+        toast.error("Unexpected error occurred");
+      }
     }
   };
 
@@ -262,6 +296,7 @@ const Dashboard = () => {
         <UploadResumeModal
           isOpen={showUploadResume}
           title={title}
+          isLoading={isLoading}
           resumeFile={resume}
           onChangeTitle={setTitle}
           onChangeFile={setResume}

@@ -36,7 +36,7 @@ const Testimonial = () => {
         >
           <Title
             title="Success Stories That Speak for Themselves"
-            description="Learn how professionals achieved career breakthroughs with the help of our AI‑driven resume builder."
+            description="Learn how professionals achieved career breakthroughs with the help of our AI-driven resume builder."
           />
         </motion.div>
       </motion.div>
@@ -127,7 +127,7 @@ const Testimonial = () => {
           <div className="px-4 pb-4">
             <p className="font-medium border-b border-gray-600 pb-5">
               "I wanted to move into tech but struggled. The AI builder shaped
-              my background into a strong story — now I’m a front‑end
+              my background into a strong story — now I'm a front-end
               developer!"
             </p>
             <p className="mt-4">— Elizabeth Russell</p>

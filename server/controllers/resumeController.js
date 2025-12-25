@@ -44,7 +44,7 @@ export const getResumeById = async (req, res) => {
     const userId = req.userId;
     const { resumeId } = req.params;
 
-    const resume = await Resume.findOne({ useId, _id: resumeId });
+    const resume = await Resume.findOne({ userId, _id: resumeId });
 
     if (!resume) {
       return res.status(404).json({ message: "Resume not found" });
@@ -84,7 +84,7 @@ export const updateResume = async (req, res) => {
     const { resumeId, resumeData, removeBackground } = req.body;
     const image = req.file;
 
-    let resumeDataCopy = JSON.parse(resumeData);
+    let resumeDataCopy = JSON.parse(JSON.stringify(resumeData));
     if (image) {
       const imageBufferData = fs.createReadStream(image.path);
       const response = await ImageKit.files.upload({
