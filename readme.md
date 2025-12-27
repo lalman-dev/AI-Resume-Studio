@@ -103,6 +103,7 @@ npm run server
 ```
 
 📌 Future Improvements
+
 ✅ Add testing with Jest/React Testing Library
 
 ✅ Export resumes as PDF/Docx
