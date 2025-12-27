@@ -1,11 +1,11 @@
 # 🚀 AI Resume Studio App
 
-![React](https://img.shields.io/badge/React-18.0-blue?logo=react)
-![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?logo=typescript)
-![TailwindCSS](https://img.shields.io/badge/TailwindCSS-3.3-38BDF8?logo=tailwindcss)
-![Framer Motion](https://img.shields.io/badge/FramerMotion-10.0-ff69b4?logo=framer)
+![React](https://img.shields.io/badge/React-19.2-blue?logo=react)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue?logo=typescript)
+![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4.17-38BDF8?logo=tailwindcss)
+![Framer Motion](https://img.shields.io/badge/FramerMotion-12.23-ff69b4?logo=framer)
 ![Node.js](https://img.shields.io/badge/Node.js-18.0-green?logo=node.js)
-![Express](https://img.shields.io/badge/Express-4.18-black?logo=express)
+![Express](https://img.shields.io/badge/Express-5.21-black?logo=express)
 ![MongoDB](https://img.shields.io/badge/MongoDB-6.0-47A248?logo=mongodb)
 ![ImageKit](https://img.shields.io/badge/ImageKit-Upload-orange)
 ![OpenAI](https://img.shields.io/badge/OpenAI-API-black?logo=openai)
