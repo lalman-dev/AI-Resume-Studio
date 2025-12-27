@@ -1,6 +1,7 @@
 import multer from "multer";
 
-const storage = multer.diskStorage({});
+// Use memory storage so files are kept in RAM and not written to disk
+const storage = multer.memoryStorage();
 
 const upload = multer({ storage });
 

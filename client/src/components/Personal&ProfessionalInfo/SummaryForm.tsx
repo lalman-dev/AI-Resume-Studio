@@ -1,14 +1,43 @@
-import React from "react";
-import { Sparkles } from "lucide-react";
+import React, { useState } from "react";
+import { Loader2, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
+import { useAppSelector } from "../../app/hooks";
+import api from "../../configs/api";
+import toast from "react-hot-toast";
+import { AxiosError } from "axios";
 
 interface SummaryFormProps {
   data: string;
   onChange: (value: string) => void;
-  setResumeData?: React.Dispatch<React.SetStateAction<any>>;
 }
 
 const SummaryForm: React.FC<SummaryFormProps> = ({ data, onChange }) => {
+  const { token } = useAppSelector((state) => state.auth);
+  const [isGenerating, setIsGenerating] = useState<boolean>(false);
+
+  const generateSummary = async () => {
+    try {
+      setIsGenerating(true);
+      const prompt = `enhance my professional summary "${data}"`;
+      const response = await api.post(
+        "/api/ai/enhance-pro-sum",
+        { userContent: prompt },
+        { headers: { Authorization: token } }
+      );
+      onChange(response.data.enhancedContent);
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        toast.error(error.response?.data?.message || error.message);
+      } else if (error instanceof Error) {
+        toast.error(error.message);
+      } else {
+        toast.error("Unexpected error occurred");
+      }
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
   return (
     <motion.section
       className="space-y-4"
@@ -36,9 +65,15 @@ const SummaryForm: React.FC<SummaryFormProps> = ({ data, onChange }) => {
           type="button"
           className="flex items-center gap-2 px-3 py-1 text-sm bg-purple-100 text-purple-700 rounded hover:bg-purple-200 transition-colors disabled:opacity-50"
           aria-label="Enhance summary with AI"
+          disabled={isGenerating}
+          onClick={generateSummary}
         >
-          <Sparkles className="size-4" aria-hidden="true" />
-          AI Enhance
+          {isGenerating ? (
+            <Loader2 className="size-4 animate-spin" />
+          ) : (
+            <Sparkles className="size-4" aria-hidden="true" />
+          )}
+          {isGenerating ? "Enhancing..." : "AI Enhance"}
         </motion.button>
       </div>
 

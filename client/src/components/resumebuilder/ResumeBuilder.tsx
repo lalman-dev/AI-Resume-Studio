@@ -7,7 +7,6 @@ import {
   EyeOffIcon,
   Share2Icon,
 } from "lucide-react";
-import { dummyResumeData } from "../../assets/assets";
 import type { ResumeData } from "../../utils/types";
 import ProgressBar from "./ProgressBar";
 import SectionNavigation from "./SectionNavigation";
@@ -16,6 +15,7 @@ import ResumePreviewPanel from "./ResumePreviewPanel";
 import { useAppSelector } from "../../app/hooks";
 import api from "../../configs/api";
 import toast from "react-hot-toast";
+import { AxiosError } from "axios";
 
 const ResumeBuilder: React.FC = () => {
   const { resumeId } = useParams<{ resumeId: string }>();
@@ -37,17 +37,24 @@ const ResumeBuilder: React.FC = () => {
     updatedAt: "",
     userId: "",
   });
+
   const loadExistingResume = async () => {
     try {
-      const { data } = await api.get("/api/resume/get/" + resumeId, {
+      const { data } = await api.get(`/api/resumes/get/${resumeId}`, {
         headers: { Authorization: token },
       });
       if (data.resume) {
         setResumeData(data.resume);
         document.title = data.resume.title;
       }
-    } catch (error:unknown) {
-      console.error(error.message);
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        console.error(error.response?.data?.message || error.message);
+      } else if (error instanceof Error) {
+        console.error(error.message);
+      } else {
+        console.error("Unexpected Error", error);
+      }
     }
   };
 
@@ -55,35 +62,37 @@ const ResumeBuilder: React.FC = () => {
   const [removeBackground, setRemoveBackGround] = useState<boolean>(false);
 
   useEffect(() => {
-    const resume = dummyResumeData.find((r) => r._id === resumeId);
-    if (resume) {
-      setResumeData(resume as ResumeData);
-      document.title = resume.title;
+    if (resumeId) {
+      loadExistingResume();
     }
   }, [resumeId]);
 
   const changeResumeVisibility = async () => {
     try {
+      if (!resumeId) throw new Error("resumeId is required");
+
       const formData = new FormData();
       formData.append("resumeId", resumeId);
       formData.append(
-        "resumeId",
+        "resumeData",
         JSON.stringify({ public: !resumeData.public })
       );
 
-      const { data } = await api.put("/api/resumes/update" + formData, {
+      const { data } = await api.put("/api/resumes/update", formData, {
         headers: { Authorization: token },
       });
-      setResumeData({...resumeData, public:!resumeData.public})
-      toast.success(data.message)
+
+      setResumeData(data.resume);
+      toast.success(data.message);
     } catch (error) {
-      console.error("Error saving resume:",error)
+      console.error("Error saving resume:", error);
+      toast.error("Failed to change visibility");
     }
   };
 
   const handleShare = () => {
     const frontendUrl = window.location.href.split("/app/")[0];
-    const resumeUrl = frontendUrl + "/view" + resumeId;
+    const resumeUrl = `${frontendUrl}/view/${resumeId}`;
 
     if (navigator.share) {
       navigator.share({ url: resumeUrl, text: "My Resume" });
@@ -92,10 +101,14 @@ const ResumeBuilder: React.FC = () => {
     }
   };
 
+  const downloadResume = () => {
+    window.print();
+  };
+
   return (
     <main className="min-h-screen">
       <header className="max-w-7xl mx-auto px-6 py-6 flex justify-between">
-        {/* Back link */}{" "}
+        {/* Back link */}
         <Link
           to="/app"
           className="inline-flex gap-2 items-center text-slate-500 hover:text-slate-700 transition-all"
@@ -125,7 +138,7 @@ const ResumeBuilder: React.FC = () => {
             {resumeData.public ? "Public" : "Private"}
           </button>
           <button
-            onClick={() => window.print()}
+            onClick={downloadResume}
             className="flex items-center p-2 px-4 gap-2 text-xs bg-linear-to-br from-green-100 to-green-200 text-green-600 rounded-lg ring-green-300 hover:ring transition-colors"
           >
             <DownloadIcon className="size-4" /> Download

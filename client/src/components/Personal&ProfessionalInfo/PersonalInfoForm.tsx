@@ -29,7 +29,6 @@ interface PersonalInfoFormProps {
   setRemoveBackGround: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-// Exclude "image" from text fields
 type PersonalTextFieldKey = keyof Omit<PersonalInfoData, "image">;
 
 interface FormField {

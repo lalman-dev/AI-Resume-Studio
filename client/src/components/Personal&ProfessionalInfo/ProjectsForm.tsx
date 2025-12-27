@@ -54,8 +54,9 @@ const ProjectsForm: React.FC<ProjectsFormProps> = ({ data, onChange }) => {
           type="button"
           onClick={addProject}
           className="flex items-center gap-2 px-3 py-1 text-sm bg-green-100 text-green-700 rounded hover:bg-green-200"
+          aria-label="Add project"
         >
-          <Plus className="size-4" /> Add Your Project
+          <Plus className="size-4" /> Add Project
         </motion.button>
       </div>
 
@@ -72,6 +73,7 @@ const ProjectsForm: React.FC<ProjectsFormProps> = ({ data, onChange }) => {
               type="button"
               onClick={() => removeProject(index)}
               className="text-red-500 hover:text-red-700"
+              aria-label={`Remove project ${index + 1}`}
             >
               <Trash2 className="size-4" />
             </button>
@@ -86,7 +88,7 @@ const ProjectsForm: React.FC<ProjectsFormProps> = ({ data, onChange }) => {
           <input
             value={proj.type}
             onChange={(e) => updateProject(index, "type", e.target.value)}
-            placeholder="Project Type"
+            placeholder="Project Type (e.g., Web App, Mobile App)"
             className="w-full px-3 py-2 text-sm border rounded-lg"
           />
           <textarea

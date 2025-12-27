@@ -6,6 +6,10 @@ import type { ResumeData } from "../../utils/types";
 import EducationForm from "../Personal&ProfessionalInfo/EducationForm";
 import ProjectsForm from "../Personal&ProfessionalInfo/ProjectsForm";
 import SkillsForm from "../Personal&ProfessionalInfo/SkillsForm";
+import api from "../../configs/api";
+import toast from "react-hot-toast";
+import { useParams } from "react-router-dom";
+import { useAppSelector } from "../../app/hooks";
 
 interface Props {
   activeIndex: number;
@@ -32,6 +36,41 @@ const SectionContent: React.FC<Props> = ({
   setRemoveBackGround,
 }) => {
   const activeSection = sections[activeIndex];
+  const { resumeId } = useParams<{ resumeId: string }>();
+  const { token } = useAppSelector((state) => state.auth);
+
+  const saveResume = async () => {
+    try {
+      if (!resumeId) throw new Error("resumeId is required");
+
+      let updatedResumeData = structuredClone(resumeData);
+      if (typeof resumeData.personal_info?.image === "object") {
+        delete updatedResumeData.personal_info.image;
+      }
+
+      const formData = new FormData();
+      formData.append("resumeId", resumeId);
+      formData.append("resumeData", JSON.stringify(updatedResumeData));
+      if (removeBackground) formData.append("removeBackground", "yes");
+      if (typeof resumeData.personal_info?.image === "object") {
+        formData.append("image", resumeData.personal_info.image);
+      }
+
+      const { data } = await api.put("/api/resumes/update", formData, {
+        headers: { Authorization: token },
+      });
+
+      setResumeData(data.resume);
+      toast.success(data.message);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error(error.message);
+      } else {
+        toast.error("Unexpected error occurred");
+      }
+      console.error("Error saving resume:", error);
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -104,6 +143,9 @@ const SectionContent: React.FC<Props> = ({
           whileTap={{ scale: 0.95 }}
           transition={{ duration: 0.4, ease: "easeOut" }}
           className="bg-linear-to-r from-gray-100 to-green-200 text-gray-600 ring hover:ring-gray-400 transition-all rounded-md px-6 py-2 mt-6 text-sm"
+          onClick={() => {
+            toast.promise(saveResume(), { loading: "Saving..." });
+          }}
         >
           Save Changes
         </motion.button>

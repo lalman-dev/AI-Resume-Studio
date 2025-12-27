@@ -1,6 +1,7 @@
 import Resume from "../models/Resume.js";
 import ai from "../configs/ai.js";
-// Controller for enhancing a resume's professional summary
+
+// Enhance professional summary
 // POST: /api/ai/enhance-pro-sum
 export const enhanceProfessionalSummary = async (req, res) => {
   try {
@@ -17,10 +18,7 @@ export const enhanceProfessionalSummary = async (req, res) => {
           content:
             "You are a professional resume writer specializing in crafting concise, compelling summaries. Your task is to transform the user's draft into a polished professional summary that is 1-2 sentences long. It must highlight the candidate's most relevant skills, experiences, and career objectives in a way that is clear, confident, and optimized for Applicant Tracking Systems (ATS). Avoid generic phrases, keep the tone professional, and return only the enhanced summary text without explanations, options, or formatting.",
         },
-        {
-          role: "user",
-          content: userContent,
-        },
+        { role: "user", content: userContent },
       ],
     });
 
@@ -32,7 +30,7 @@ export const enhanceProfessionalSummary = async (req, res) => {
   }
 };
 
-// Controller for enhancing a resume's job description
+// Enhance job description
 // POST: /api/ai/enhance-job-desc
 export const enhanceJobDescription = async (req, res) => {
   try {
@@ -49,10 +47,7 @@ export const enhanceJobDescription = async (req, res) => {
           content:
             "You are a professional resume writer specializing in crafting impactful job descriptions. Your task is to transform the user's draft into polished bullet points that clearly highlight responsibilities, achievements, and measurable impact. Each bullet must begin with a strong action verb, emphasize relevant skills, tools, and technologies, and quantify results wherever possible. Keep the language concise, professional, and optimized for Applicant Tracking Systems (ATS). Avoid generic phrases, repetition, or filler. Return only the enhanced job description bullet points without explanations, options, or formatting.",
         },
-        {
-          role: "user",
-          content: userContent,
-        },
+        { role: "user", content: userContent },
       ],
     });
 
@@ -66,12 +61,13 @@ export const enhanceJobDescription = async (req, res) => {
   }
 };
 
-// Controller for adding a resume to the database
+// Upload resume
 // POST: /api/ai/upload-resume
 export const uploadResume = async (req, res) => {
   try {
     const { resumeText, title } = req.body;
     const userId = req.userId;
+
     if (!resumeText) {
       return res.status(400).json({ message: "Missing required fields" });
     }

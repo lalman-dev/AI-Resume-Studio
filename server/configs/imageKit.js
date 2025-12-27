@@ -5,4 +5,4 @@ const imageKit = new ImageKit({
   // This is the default and can be omitted
 });
 
-export default ImageKit;
+export default imageKit;

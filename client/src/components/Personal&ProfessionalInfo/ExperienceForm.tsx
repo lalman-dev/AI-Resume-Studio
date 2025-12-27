@@ -1,6 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { Briefcase, Plus, Sparkles, Trash2 } from "lucide-react";
+import { Briefcase, Plus, Sparkles, Trash2, Loader2 } from "lucide-react";
+import { useAppSelector } from "../../app/hooks";
+import api from "../../configs/api";
+import toast from "react-hot-toast";
+import { AxiosError } from "axios";
 
 interface Experience {
   company: string;
@@ -17,6 +21,9 @@ interface ExperienceFormProps {
 }
 
 const ExperienceForm: React.FC<ExperienceFormProps> = ({ data, onChange }) => {
+  const { token } = useAppSelector((state) => state.auth);
+  const [loadingIndex, setLoadingIndex] = useState<number | null>(null);
+
   const addExperience = () => {
     const newExperience: Experience = {
       company: "",
@@ -42,6 +49,32 @@ const ExperienceForm: React.FC<ExperienceFormProps> = ({ data, onChange }) => {
     const updated = [...data];
     updated[index] = { ...updated[index], [field]: value };
     onChange(updated);
+  };
+
+  const enhanceDescription = async (index: number) => {
+    try {
+      setLoadingIndex(index);
+      const prompt = `enhance my job description "${data[index].description}"`;
+
+      const response = await api.post(
+        "/api/ai/enhance-experience",
+        { userContent: prompt },
+        { headers: { Authorization: token } }
+      );
+
+      updateExperience(index, "description", response.data.enhancedContent);
+      toast.success("Description enhanced with AI");
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        toast.error(error.response?.data?.message || error.message);
+      } else if (error instanceof Error) {
+        toast.error(error.message);
+      } else {
+        toast.error("Unexpected error occurred");
+      }
+    } finally {
+      setLoadingIndex(null);
+    }
   };
 
   return (
@@ -176,10 +209,18 @@ const ExperienceForm: React.FC<ExperienceFormProps> = ({ data, onChange }) => {
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     type="button"
+                    onClick={() => enhanceDescription(index)}
+                    disabled={loadingIndex === index}
                     className="flex items-center gap-1 px-2 py-1 text-xs bg-purple-100 text-purple-700 rounded hover:bg-purple-200 transition-colors disabled:opacity-50"
                   >
-                    <Sparkles className="w-3 h-3" aria-hidden="true" />
-                    Enhance With AI
+                    {loadingIndex === index ? (
+                      <Loader2 className="w-3 h-3 animate-spin" />
+                    ) : (
+                      <Sparkles className="w-3 h-3" aria-hidden="true" />
+                    )}
+                    {loadingIndex === index
+                      ? "Enhancing..."
+                      : "Enhance With AI"}
                   </motion.button>
                 </div>
                 <textarea
