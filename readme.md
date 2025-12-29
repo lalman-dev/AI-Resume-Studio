@@ -1,5 +1,16 @@
 # 🚀 AI Resume Studio App
 
+
+## 📖 Overview
+
+A modern, full‑stack **Resume Builder** designed to help users craft professional resumes with ease.  
+It combines **AI‑powered enhancements**, **image uploads**, and **real‑time editing** with a sleek UI built for recruiters and job seekers.
+
+
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-ai--resume--studio-success?logo=vercel)](https://ai-resume-studio-snowy.vercel.app/)
+
+---
+
 ![React](https://img.shields.io/badge/React-19.2.0-blue?logo=react)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.9.3-blue?logo=typescript)
 ![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4.1.17-38BDF8?logo=tailwindcss)
@@ -18,13 +29,6 @@
 ![JWT](https://img.shields.io/badge/JWT-9.0.3-blue?logo=jsonwebtokens)
 ![Bcrypt](https://img.shields.io/badge/Bcrypt-6.0.0-lightgrey)
 ![Dotenv](https://img.shields.io/badge/Dotenv-17.2.3-green)
-
----
-
-## 📖 Overview
-
-A modern, full‑stack **Resume Builder** designed to help users craft professional resumes with ease.  
-It combines **AI‑powered enhancements**, **image uploads**, and **real‑time editing** with a sleek UI built for recruiters and job seekers.
 
 ---
 
