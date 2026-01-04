@@ -120,6 +120,7 @@ This project taught me far more through what broke than what worked immediately.
 ---
 
 ⚠️ Known Limitations (Intentional Transparency)
+
 📸 **Image Upload Handling** (Partially Implemented)
 
 Image upload was the hardest part of this project.
@@ -146,20 +147,6 @@ This is an area I plan to revisit as my backend skills mature.
 
 ---
 
-## 🚀 Getting Started
-
-Follow these steps to set up and run the project locally.
-
-### 📦 Prerequisites
-
-- **Node.js v18+** installed
-- **npm** or **yarn** package manager
-- **MongoDB** running locally or on a cloud service (e.g., MongoDB Atlas)
-- **OpenAI API key** (for AI enhancement features)
-- **ImageKit account credentials** (for image upload and transformation)
-
----
-
 ## 🐞 Bugs I Fixed (Learning Through Debugging)
 
 This project involved extensive real-world debugging. Many issues were not obvious at first and required careful tracing of frontend–backend communication, middleware behavior, and request lifecycles. Below are some of the most important bugs I encountered and fixed while building this application.
@@ -169,14 +156,15 @@ This project involved extensive real-world debugging. Many issues were not obvio
 Users could log in successfully, but protected routes kept returning 401 Unauthorized.
 
 **Root cause:**
-  Authorization headers were inconsistently attached. Some requests overrode headers manually while others relied on defaults.
+Authorization headers were inconsistently attached. Some requests overrode headers manually while others relied on defaults.
 
 **Fix:**
-  - Implemented a global Axios interceptor to attach the JWT token
 
-  - Removed manual Authorization headers from individual API calls
+- Implemented a global Axios interceptor to attach the JWT token
 
-  - Ensured consistent Bearer <token> formatting
+- Removed manual Authorization headers from individual API calls
+
+- Ensured consistent Bearer <token> formatting
 
 **What I Learned:**
 Authentication issues often come from small inconsistencies rather than broken logic.
@@ -190,19 +178,19 @@ Renaming a resume appeared to work in the UI but reverted after refresh.
 
 **Root Cause:**
 
-  - Frontend route mismatch (/resume vs /resumes)
+- Frontend route mismatch (/resume vs /resumes)
 
-  - Backend update logic didn’t persist the title correctly
+- Backend update logic didn’t persist the title correctly
 
-  - Update requests silently failed due to payload mismatch
+- Update requests silently failed due to payload mismatch
 
 **Fix:**
 
-  - Aligned frontend routes with backend routes
+- Aligned frontend routes with backend routes
 
-  - Corrected update payload structure
+- Corrected update payload structure
 
-  - Ensured resume title updates were saved in MongoDB
+- Ensured resume title updates were saved in MongoDB
 
 **What I Learned:**
 UI updates can be misleading if backend persistence fails silently.
@@ -211,24 +199,24 @@ UI updates can be misleading if backend persistence fails silently.
 
 ### 🤖 AI Job Description Enhancement Failing
 
-**Problem:***
+**Problem:\***
 AI summary enhancement worked, but AI job description enhancement always failed.
 
 **Root Cause:**
 
-  - Frontend called a non-existent backend endpoint
+- Frontend called a non-existent backend endpoint
 
-  - Response key mismatch between backend and frontend
+- Response key mismatch between backend and frontend
 
-  - Authorization headers were accidentally overridden
+- Authorization headers were accidentally overridden
 
 **Fix:**
 
-  - Corrected API endpoint paths
+- Corrected API endpoint paths
 
-  - Unified response formats
+- Unified response formats
 
-  - Removed conflicting headers
+- Removed conflicting headers
 
 **What I Learned:**
 Frontend–backend contracts must match exactly; even small naming differences can break features completely.
@@ -245,9 +233,9 @@ multer middleware expected multipart/form-data, but some requests were sent as J
 
 **Fix:**
 
-  - Separated text updates from file upload logic
+- Separated text updates from file upload logic
 
-  - Ensured multipart requests were only used when files were present
+- Ensured multipart requests were only used when files were present
 
 **What I Learned:**
 Middleware order and request formats matter more than expected, especially with file uploads.
@@ -261,17 +249,17 @@ Profile image preview worked on the frontend, but saving images consistently fai
 
 **What Worked:**
 
-  - Image preview in React
+- Image preview in React
 
-  - Multer file detection
+- Multer file detection
 
-  - ImageKit integration
+- ImageKit integration
 
 **What Didn’t Fully Stabilize:**
 
-  - Coordinating multipart requests with complex resume updates
+- Coordinating multipart requests with complex resume updates
 
-  - Preventing regressions while fixing image handling
+- Preventing regressions while fixing image handling
 
 **Decision:**
 Rather than hiding the issue, I documented it and prioritized overall application stability.
@@ -283,13 +271,27 @@ Knowing when to pause a feature is as important as knowing how to implement it.
 
 Most of these bugs were not caused by lack of syntax knowledge, but by:
 
-  - Misaligned assumptions between frontend and backend
+- Misaligned assumptions between frontend and backend
 
-  - Middleware behavior I hadn’t encountered before
+- Middleware behavior I hadn’t encountered before
 
-  - Silent failures without clear error messages
+- Silent failures without clear error messages
 
 Fixing them taught me how real applications break and how engineers debug them systematically rather than guessing.
+
+---
+
+## 🚀 Getting Started
+
+Follow these steps to set up and run the project locally.
+
+### 📦 Prerequisites
+
+- **Node.js v18+** installed
+- **npm** or **yarn** package manager
+- **MongoDB** running locally or on a cloud service (e.g., MongoDB Atlas)
+- **OpenAI API key** (for AI enhancement features)
+- **ImageKit account credentials** (for image upload and transformation)
 
 ---
 
