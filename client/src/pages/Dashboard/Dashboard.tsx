@@ -122,7 +122,7 @@ const Dashboard = () => {
     try {
       event.preventDefault();
       const { data } = await api.put(
-        "/api/resume/update",
+        "/api/resumes/update",
         { resumeId: editResumeId, resumeData: { title } },
         { headers: { Authorization: token } }
       );
