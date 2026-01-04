@@ -32,33 +32,30 @@ export const enhanceProfessionalSummary = async (req, res) => {
 
 // Enhance job description
 // POST: /api/ai/enhance-job-desc
+
 export const enhanceJobDescription = async (req, res) => {
-  try {
-    const { userContent } = req.body;
-    if (!userContent) {
-      return res.status(400).json({ message: "Missing required fields" });
-    }
+  const { userContent } = req.body;
 
-    const response = await ai.chat.completions.create({
-      model: process.env.OPENAI_MODEL,
-      messages: [
-        {
-          role: "system",
-          content:
-            "You are a professional resume writer specializing in crafting impactful job descriptions. Your task is to transform the user's draft into polished bullet points that clearly highlight responsibilities, achievements, and measurable impact. Each bullet must begin with a strong action verb, emphasize relevant skills, tools, and technologies, and quantify results wherever possible. Keep the language concise, professional, and optimized for Applicant Tracking Systems (ATS). Avoid generic phrases, repetition, or filler. Return only the enhanced job description bullet points without explanations, options, or formatting.",
-        },
-        { role: "user", content: userContent },
-      ],
-    });
-
-    const enhancedContent = response.choices[0].message.content;
-    return res.status(200).json({ enhancedContent });
-  } catch (error) {
-    console.error("Error enhancing job description:", error);
-    return res
-      .status(500)
-      .json({ message: "Failed to enhance job description" });
+  if (!userContent || userContent.trim().length < 20) {
+    return res.status(400).json({ message: "Invalid JD input" });
   }
+
+  const response = await ai.chat.completions.create({
+    model: process.env.OPENAI_MODEL,
+    messages: [
+      {
+        role: "system",
+        content:
+          "You are a professional resume writer specializing in crafting impactful job descriptions. Your task is to transform the user's draft into polished bullet points that clearly highlight responsibilities, achievements, and measurable impact. Each bullet must begin with a strong action verb, emphasize relevant skills, tools, and technologies, and quantify results wherever possible. Keep the language concise, professional, and optimized for Applicant Tracking Systems (ATS). Avoid generic phrases, repetition, or filler. Return only the enhanced job description bullet points without explanations, options, or formatting.",
+      },
+      {
+        role: "user",
+        content: userContent.slice(0, 3000),
+      },
+    ],
+  });
+
+  res.json({ result: response.choices[0].message.content });
 };
 
 // Upload resume
