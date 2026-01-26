@@ -1,8 +1,8 @@
 // routes/userRouter.js
 import express from "express";
 import {
-  getUserId,
-  getUserResume,
+  getUserById,
+  getUserResumes,
   loginUser,
   registerUser,
 } from "../controllers/userController.js";
@@ -17,9 +17,9 @@ userRouter.post("/register", registerUser);
 userRouter.post("/login", loginUser);
 
 // Get user data (protected)
-userRouter.get("/data", protect, getUserId);
+userRouter.get("/data", protect, getUserById);
 
 // Get all resumes for a user (protected)
-userRouter.get("/resumes", protect, getUserResume);
+userRouter.get("/resumes", protect, getUserResumes);
 
 export default userRouter;

@@ -3,9 +3,7 @@ import Resume from "../models/Resume.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-/**
- * Generate JWT token
- */
+/*Generate JWT token*/
 const generateToken = (user) => {
   return jwt.sign(
     { userId: user._id }, // ✅ always consistent
@@ -71,8 +69,6 @@ export const loginUser = async (req, res) => {
     if (!isMatch) {
       return res.status(400).json({ message: "Invalid email or password" });
     }
-
-    // ✅ IMPORTANT FIX: pass full user object
     const token = generateToken(user);
 
     user.password = undefined;
@@ -88,7 +84,7 @@ export const loginUser = async (req, res) => {
 };
 
 /*GET LOGGED-IN USER
- * req.userId comes from auth middleware
+ req.userId comes from auth middleware
  */
 export const getUserById = async (req, res) => {
   try {
