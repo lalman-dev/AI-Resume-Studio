@@ -15,7 +15,7 @@ import ResumePreviewPanel from "./ResumePreviewPanel";
 import { useAppSelector } from "../../app/hooks";
 import api from "../../configs/api";
 import toast from "react-hot-toast";
-import { AxiosError } from "axios";
+import { handleAxiosError } from "../../utils/errorHandler";
 
 const ResumeBuilder: React.FC = () => {
   const { resumeId } = useParams<{ resumeId: string }>();
@@ -47,14 +47,8 @@ const ResumeBuilder: React.FC = () => {
         setResumeData(data.resume);
         document.title = data.resume.title;
       }
-    } catch (error: unknown) {
-      if (error instanceof AxiosError) {
-        console.error(error.response?.data?.message || error.message);
-      } else if (error instanceof Error) {
-        console.error(error.message);
-      } else {
-        console.error("Unexpected Error", error);
-      }
+    } catch (err) {
+      handleAxiosError(err);
     }
   };
 
@@ -76,7 +70,7 @@ const ResumeBuilder: React.FC = () => {
       const { data } = await api.put(
         "/api/resumes/update",
         { resumeId, resumeData: updatedResumeData },
-        { headers: { Authorization: token } }
+        { headers: { Authorization: token } },
       );
 
       setResumeData(data.resume);

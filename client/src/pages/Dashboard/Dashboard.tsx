@@ -16,7 +16,7 @@ import { useAppSelector } from "../../app/hooks";
 import api from "../../configs/api";
 import toast from "react-hot-toast";
 import pdfToText from "react-pdftotext";
-import { AxiosError } from "axios";
+import { handleAxiosError } from "../../utils/errorHandler";
 
 const Dashboard = () => {
   const { token } = useAppSelector((state) => state.auth);
@@ -40,20 +40,14 @@ const Dashboard = () => {
   ];
 
   const loadAllResumes = async () => {
-    setIsLoading(true); 
+    setIsLoading(true);
     try {
       const { data } = await api.get("/api/users/resumes", {
         headers: { Authorization: token },
       });
       setAllResumes(data.resumes);
-    } catch (err: unknown) {
-      if (err instanceof AxiosError) {
-        toast.error(err.response?.data?.message || "Something went wrong");
-      } else if (err instanceof Error) {
-        toast.error(err.message);
-      } else {
-        toast.error("Unexpected error occurred");
-      }
+    } catch (err) {
+      handleAxiosError(err);
     } finally {
       setIsLoading(false);
     }
@@ -65,25 +59,14 @@ const Dashboard = () => {
       const { data } = await api.post(
         "/api/resumes/create",
         { title },
-        { headers: { Authorization: token } }
+        { headers: { Authorization: token } },
       );
       setAllResumes([...allResumes, data.resume]);
       setTitle("");
       setShowCreateResume(false);
       navigate(`/app/builder/${data.resume._id}`);
-    } catch (err: unknown) {
-      if (err && typeof err === "object" && "response" in err) {
-        const axiosError = err as {
-          response?: { data?: { message?: string } };
-        };
-        toast.error(
-          axiosError.response?.data?.message || "Something went wrong"
-        );
-      } else if (err instanceof Error) {
-        toast.error(err.message);
-      } else {
-        toast.error("Unexpected error occurred");
-      }
+    } catch (err) {
+      handleAxiosError(err);
     }
   };
 
@@ -100,22 +83,14 @@ const Dashboard = () => {
       const { data } = await api.post(
         "/api/ai/upload-resume",
         { title, resumeText },
-        { headers: { Authorization: token } }
+        { headers: { Authorization: token } },
       );
       setTitle("");
       setResume(null);
       setShowUploadResume(false);
       navigate(`/app/builder/${data.resumeId}`);
-    } catch (err: unknown) {
-      if (err instanceof AxiosError) {
-        toast.error(err.response?.data?.message || "Something went wrong");
-      } else if (err instanceof Error) {
-        toast.error(err.message);
-      } else {
-        toast.error("Unexpected error occurred");
-      }
-    } finally {
-      setIsLoading(false);
+    } catch (err) {
+      handleAxiosError(err);
     }
   };
 
@@ -125,24 +100,18 @@ const Dashboard = () => {
       const { data } = await api.put(
         "/api/resumes/update",
         { resumeId: editResumeId, resumeData: { title } },
-        { headers: { Authorization: token } }
+        { headers: { Authorization: token } },
       );
       setAllResumes(
         allResumes.map((resume) =>
-          resume._id === editResumeId ? { ...resume, title } : resume
-        )
+          resume._id === editResumeId ? { ...resume, title } : resume,
+        ),
       );
       setTitle("");
       setEditResumeId("");
       toast.success(data.message);
-    } catch (err: unknown) {
-      if (err instanceof AxiosError) {
-        toast.error(err.response?.data?.message || "Something went wrong");
-      } else if (err instanceof Error) {
-        toast.error(err.message);
-      } else {
-        toast.error("Unexpected error occurred");
-      }
+    } catch (err) {
+      handleAxiosError(err);
     }
   };
 
@@ -153,18 +122,12 @@ const Dashboard = () => {
           headers: { Authorization: token },
         });
         setAllResumes((prev) =>
-          prev.filter((resume) => resume._id !== resumeId)
+          prev.filter((resume) => resume._id !== resumeId),
         );
         toast.success(data.message);
       }
-    } catch (err: unknown) {
-      if (err instanceof AxiosError) {
-        toast.error(err.response?.data?.message || "Something went wrong");
-      } else if (err instanceof Error) {
-        toast.error(err.message);
-      } else {
-        toast.error("Unexpected error occurred");
-      }
+    } catch (err) {
+      handleAxiosError(err);
     }
   };
 
