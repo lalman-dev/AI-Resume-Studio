@@ -48,8 +48,6 @@ const Login = () => {
         toast.error("Unexpected error occurred");
       }
     }
-
-    console.log("Submitted:", formData);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

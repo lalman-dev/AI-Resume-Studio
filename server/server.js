@@ -9,9 +9,6 @@ import aiRouter from "./routes/aiRoutes.js";
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-//Database connection
-await connectDB();
-
 app.use(express.json());
 app.use(cors());
 
@@ -22,4 +19,5 @@ app.use("/api/resumes", resumeRouter);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
+  connectDB(); // non-blocking
 });
