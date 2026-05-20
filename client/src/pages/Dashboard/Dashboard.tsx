@@ -40,6 +40,7 @@ const Dashboard = () => {
   ];
 
   const loadAllResumes = async () => {
+    setIsLoading(true); 
     try {
       const { data } = await api.get("/api/users/resumes", {
         headers: { Authorization: token },
