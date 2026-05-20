@@ -54,27 +54,30 @@ const Hero = () => {
 
         {/* Desktop Buttons */}
         <div className="hidden md:flex gap-4">
-          <Link
-            to="/app?state=register"
-            className="px-6 py-2 bg-linear-to-r from-blue-300 to-blue-500 hover:from-blue-400 hover:to-blue-500 transition-all duration-300 hover:scale-105 active:scale-95 rounded-full border border-white text-white"
-            hidden={!!user}
-          >
-            Get Started
-          </Link>
-          <Link
-            to="/app?state=login"
-            className="px-6 py-2 bg-white hover:bg-gray-300 transition-all duration-300 hover:scale-110 active:scale-95 rounded-full border border-gray-400 hover:text-cyan-600"
-            hidden={!!user}
-          >
-            Login
-          </Link>
-          <Link
-            to="/app"
-            className="hidden md:block px-8 py-2 bg-purple-500 hover:bg-purple-600 active:scale-95 transition-all rounded-full text-white"
-            hidden={!user}
-          >
-            Dashboard
-          </Link>
+          {!user && (
+            <Link
+              to="/app?state=register"
+              className="px-6 py-2 bg-linear-to-r from-blue-300 to-blue-500 hover:from-blue-400 hover:to-blue-500 transition-all duration-300 hover:scale-105 active:scale-95 rounded-full border border-white text-white"
+            >
+              Get Started
+            </Link>
+          )}
+          {!user && (
+            <Link
+              to="/app?state=login"
+              className="px-6 py-2 bg-white hover:bg-gray-300 transition-all duration-300 hover:scale-110 active:scale-95 rounded-full border border-gray-400 hover:text-cyan-600"
+            >
+              Login
+            </Link>
+          )}
+          {user && (
+            <Link
+              to="/app"
+              className="hidden md:block px-8 py-2 bg-purple-500 hover:bg-purple-600 active:scale-95 transition-all rounded-full text-white"
+            >
+              Dashboard
+            </Link>
+          )}
         </div>
 
         {/* Mobile BURGER MENU */}
