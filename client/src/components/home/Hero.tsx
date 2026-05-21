@@ -34,13 +34,23 @@ const Hero = () => {
         backgroundSize: "28px 28px",
       }}
     >
-      {/* Vignette */}
+      {/* vignette */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 z-0"
         style={{
           background:
             "radial-gradient(ellipse 90% 65% at 50% 25%, rgba(245,247,250,0.93) 0%, transparent 100%)",
+        }}
+      />
+
+      {/* Bottom fade */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute bottom-0 left-0 right-0 z-0 h-48"
+        style={{
+          background:
+            "linear-gradient(to bottom, transparent 0%, #F5F7FA 100%)",
         }}
       />
 

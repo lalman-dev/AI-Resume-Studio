@@ -17,7 +17,7 @@ const Login = () => {
   const query = new URLSearchParams(window.location.search);
   const urlState = query.get("state");
   const [state, setState] = useState<"login" | "register">(
-    urlState === "register" ? "register" : "login"
+    urlState === "register" ? "register" : "login",
   );
 
   const [formData, setFormData] = useState<FormData>({
@@ -40,7 +40,7 @@ const Login = () => {
           response?: { data?: { message?: string } };
         };
         toast.error(
-          axiosError.response?.data?.message || "Something went wrong"
+          axiosError.response?.data?.message || "Something went wrong",
         );
       } else if (err instanceof Error) {
         toast.error(err.message);
@@ -56,7 +56,26 @@ const Login = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-[url('https://raw.githubusercontent.com/prebuiltui/prebuiltui/main/assets/hero/bg-gradient.png')] bg-cover">
+    <div className="flex justify-center items-center min-h-screen bg-cover">
+      {/* Top/centre vignette */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 z-0"
+        style={{
+          background:
+            "radial-gradient(ellipse 90% 65% at 50% 25%, rgba(245,247,250,0.93) 0%, transparent 100%)",
+        }}
+      />
+
+      {/* Bottom fade — blends grid into next section */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute bottom-0 left-0 right-0 z-0 h-48"
+        style={{
+          background:
+            "linear-gradient(to bottom, transparent 0%, #F5F7FA 100%)",
+        }}
+      />
       <motion.form
         onSubmit={handleSubmit}
         initial={{ opacity: 0, scale: 0.9, y: 30 }}

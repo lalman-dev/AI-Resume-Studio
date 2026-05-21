@@ -3,6 +3,9 @@
 * {
   font-family: "Poppins", sans-serif;
 }
+body {
+  background-color: #f5f7fa;
+}
 @keyframes glow {
   0% {
     filter: blur(4px) brightness(0.8);
