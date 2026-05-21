@@ -7,7 +7,7 @@ const Testimonial = () => {
     <>
       {/* Badge + Title */}
       <motion.div
-        id="feature"
+        id="testimonial"
         className="flex flex-col items-center my-20"
         initial={{ opacity: 0, y: -20 }}
         whileInView={{ opacity: 1, y: 0 }}
