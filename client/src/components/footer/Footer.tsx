@@ -1,7 +1,7 @@
-import logo from "/logo.png";
 import { motion } from "framer-motion";
 import SocialLinks from "./SocialLinks";
 import { footerSections } from "../../utils/footerLinks";
+import Logo from "../logo";
 
 const Footer = () => {
   return (
@@ -52,7 +52,7 @@ const Footer = () => {
             viewport={{ once: true }}
             className="flex items-center space-x-3 mb-6"
           >
-            <img alt="logo" className="w-30 md:w-40" src={logo} />
+            <Logo variant="dark" size="sm" />
           </motion.div>
 
           <motion.p

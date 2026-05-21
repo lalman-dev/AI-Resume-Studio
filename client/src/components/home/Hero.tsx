@@ -1,11 +1,11 @@
 import { useState } from "react";
-import logo from "/logo.png";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { faqs } from "../../utils/faq";
 import { Menu, Video, X } from "lucide-react";
 import { Answer } from "./FaqAnswer";
 import { useAppSelector } from "../../app/hooks";
+import Logo from "../logo";
 
 const Hero = () => {
   const { user } = useAppSelector((state) => state.auth);
@@ -14,14 +14,10 @@ const Hero = () => {
 
   return (
     <main className="isolate flex items-center flex-col justify-start bg-[url('https://raw.githubusercontent.com/prebuiltui/prebuiltui/main/assets/hero/bg-gradient.png')] bg-cover text-sm text-gray-800 max-md:px-4 text-center min-h-screen relative">
-      <nav className="flex items-center justify-between w-full md:px-16 lg:px-20 relative z-10">
+      <nav className="flex items-center justify-between w-full mt-2 md:px-16 lg:px-20 relative z-10">
         {/* Logo */}
         <a href="#" aria-label="Ai-builder Logo">
-          <img
-            src={logo}
-            alt="Ai-builder Logo"
-            className="w-30 md:w-40 h-auto"
-          />
+          <Logo variant="dark" size="sm" />
         </a>
 
         {/* Desktop MENU LINKS */}
