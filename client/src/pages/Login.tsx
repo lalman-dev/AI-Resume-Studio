@@ -115,6 +115,7 @@ const Login = () => {
         </motion.p>
 
         {/* Name field (only for signup) */}
+        {/* Name field */}
         {state !== "login" && (
           <motion.div
             initial={{ opacity: 0, x: -20 }}
@@ -122,11 +123,17 @@ const Login = () => {
             transition={{ duration: 0.6, delay: 0.4 }}
             className="flex items-center mt-6 w-full bg-white border border-gray-300/80 h-12 rounded-full overflow-hidden pl-6 gap-2"
           >
-            <User2Icon size={16} color="#6B7280" />
+            <label htmlFor="name" className="sr-only">
+              Full name
+            </label>
+            <User2Icon size={16} color="#6B7280" aria-hidden="true" />
             <input
+              id="name"
               type="text"
               name="name"
               placeholder="Name"
+              autoComplete="name"
+              aria-required="true"
               className="border-none outline-none ring-0 w-full"
               value={formData.name}
               onChange={handleChange}
@@ -142,11 +149,17 @@ const Login = () => {
           transition={{ duration: 0.6, delay: 0.5 }}
           className="flex items-center w-full mt-4 bg-white border border-gray-300/80 h-12 rounded-full overflow-hidden pl-6 gap-2"
         >
-          <Mail size={13} color="#6B7280" />
+          <label htmlFor="email" className="sr-only">
+            Email address
+          </label>
+          <Mail size={13} color="#6B7280" aria-hidden="true" />
           <input
+            id="email"
             type="email"
             name="email"
             placeholder="Email id"
+            autoComplete="email"
+            aria-required="true"
             className="border-none outline-none ring-0 w-full"
             value={formData.email}
             onChange={handleChange}
@@ -161,11 +174,19 @@ const Login = () => {
           transition={{ duration: 0.6, delay: 0.6 }}
           className="flex items-center mt-4 w-full bg-white border border-gray-300/80 h-12 rounded-full overflow-hidden pl-6 gap-2"
         >
-          <Lock size={13} color="#6B7280" />
+          <label htmlFor="password" className="sr-only">
+            Password
+          </label>
+          <Lock size={13} color="#6B7280" aria-hidden="true" />
           <input
+            id="password"
             type="password"
             name="password"
             placeholder="Password"
+            autoComplete={
+              state === "login" ? "current-password" : "new-password"
+            }
+            aria-required="true"
             className="border-none outline-none ring-0 w-full"
             value={formData.password}
             onChange={handleChange}
