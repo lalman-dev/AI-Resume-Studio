@@ -1,191 +1,245 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { faqs } from "../../utils/faq";
-import { Menu, Video, X } from "lucide-react";
-import { Answer } from "./FaqAnswer";
+import { Menu, X } from "lucide-react";
 import { useAppSelector } from "../../app/hooks";
 import Logo from "../logo";
+
+const NAV_LINKS = [
+  { label: "Home", href: "#" },
+  { label: "Feature", href: "#feature" },
+  { label: "Testimonial", href: "#testimonial" },
+  { label: "Contact", href: "#contact" },
+];
+
+const STATS = [
+  { value: "10k+", label: "Resumes created" },
+  { value: "4 min", label: "Avg. build time" },
+  { value: "Free", label: "No credit card" },
+];
 
 const Hero = () => {
   const { user } = useAppSelector((state) => state.auth);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   return (
-    <main className="isolate flex items-center flex-col justify-start bg-[url('https://raw.githubusercontent.com/prebuiltui/prebuiltui/main/assets/hero/bg-gradient.png')] bg-cover text-sm text-gray-800 max-md:px-4 text-center min-h-screen relative">
-      <nav className="flex items-center justify-between w-full mt-2 md:px-16 lg:px-20 relative z-10">
+    <main
+      className="relative isolate flex flex-col items-center min-h-screen text-gray-800 overflow-hidden"
+      style={{
+        backgroundColor: "#F5F7FA",
+        backgroundImage: `
+          linear-gradient(to right, #dde3ec 1px, transparent 1px),
+          linear-gradient(to bottom, #dde3ec 1px, transparent 1px)
+        `,
+        backgroundSize: "28px 28px",
+      }}
+    >
+      {/* Vignette */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 z-0"
+        style={{
+          background:
+            "radial-gradient(ellipse 90% 65% at 50% 25%, rgba(245,247,250,0.93) 0%, transparent 100%)",
+        }}
+      />
+
+      {/* ── Navbar ── */}
+      <nav className="relative z-10 flex items-center justify-between w-full px-6 md:px-12 lg:px-20 py-4 border-b border-black/5">
         {/* Logo */}
-        <a href="#" aria-label="Ai-builder Logo">
+        <Link to="/" aria-label="AI Resume Studio home">
           <Logo variant="dark" size="sm" />
-        </a>
+        </Link>
 
-        {/* Desktop MENU LINKS */}
-        <div className="hidden md:flex items-center gap-8 font-medium">
-          <a
-            href="#"
-            className="hover:text-cyan-600 hover:underline hover:scale-110 transition-all duration-300"
-          >
-            Home
-          </a>
-          <a
-            href="#feature"
-            className="hover:text-cyan-600 hover:underline hover:scale-110 transition-all duration-300"
-          >
-            Feature
-          </a>
-          <a
-            href="#testimonial"
-            className="hover:text-cyan-600 hover:underline hover:scale-110 transition-all duration-300"
-          >
-            Testimonial
-          </a>
-          <a
-            href="#contact"
-            className="hover:text-cyan-600 hover:underline hover:scale-110 transition-all duration-300"
-          >
-            Contact
-          </a>
-        </div>
+        {/* Desktop nav links */}
+        <ul className="hidden md:flex items-center gap-8">
+          {NAV_LINKS.map(({ label, href }) => (
+            <li key={label}>
+              <a
+                href={href}
+                className="text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors duration-200"
+              >
+                {label}
+              </a>
+            </li>
+          ))}
+        </ul>
 
-        {/* Desktop Buttons */}
-        <div className="hidden md:flex gap-4">
+        {/* Desktop CTA buttons */}
+        <div className="hidden md:flex items-center gap-3">
           {!user && (
             <Link
-              to="/app?state=register"
-              className="px-6 py-2 bg-linear-to-r from-blue-300 to-blue-500 hover:from-blue-400 hover:to-blue-500 transition-all duration-300 hover:scale-105 active:scale-95 rounded-full border border-white text-white"
+              to="/app?state=login"
+              className="px-5 py-2 rounded-full border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:border-gray-400 hover:text-gray-900 transition-all duration-200"
             >
-              Get Started
+              Login
             </Link>
           )}
           {!user && (
             <Link
-              to="/app?state=login"
-              className="px-6 py-2 bg-white hover:bg-gray-300 transition-all duration-300 hover:scale-110 active:scale-95 rounded-full border border-gray-400 hover:text-cyan-600"
+              to="/app?state=register"
+              className="px-5 py-2 rounded-full bg-[#1a1a18] text-white text-sm font-medium hover:bg-[#2d2d2b] transition-all duration-200"
             >
-              Login
+              Get Started
             </Link>
           )}
           {user && (
             <Link
               to="/app"
-              className="hidden md:block px-8 py-2 bg-purple-500 hover:bg-purple-600 active:scale-95 transition-all rounded-full text-white"
+              className="px-5 py-2 rounded-full bg-[#1a1a18] text-white text-sm font-medium hover:bg-[#2d2d2b] transition-all duration-200"
             >
               Dashboard
             </Link>
           )}
         </div>
 
-        {/* Mobile BURGER MENU */}
+        {/* Mobile burger */}
         <button
-          aria-label="open menu"
-          className="size-6 md:hidden"
+          aria-label="Open menu"
+          className="md:hidden p-1 text-gray-600 hover:text-gray-900 transition-colors"
           onClick={() => setMenuOpen(true)}
         >
-          <Menu />
+          <Menu className="w-5 h-5" />
         </button>
-
-        {/* Mobile Animated MENU */}
-        <AnimatePresence>
-          {menuOpen && (
-            <motion.div
-              initial={{ x: "100%", y: "-100%", opacity: 0 }}
-              animate={{ x: 0, y: 0, opacity: 1 }}
-              exit={{ x: "100%", y: "-100%", opacity: 0 }}
-              transition={{ duration: 0.3, ease: "easeInOut" }}
-              className="fixed inset-0 bg-white/60 backdrop-blur flex flex-col items-center justify-center gap-8 font-medium text-lg z-20 md:hidden"
-            >
-              <a href="#">Home</a>
-              <a href="#feature">Feature</a>
-              <a href="#testimonial">Testimonial</a>
-              <a href="#contact">Contact</a>
-
-              {/* Close Button */}
-              <button
-                aria-label="close menu"
-                className="size-6 md:hidden"
-                onClick={() => setMenuOpen(false)}
-              >
-                <X />
-              </button>
-            </motion.div>
-          )}
-        </AnimatePresence>
       </nav>
 
-      {/* HERO CONTENT */}
-      <div className="flex flex-col items-center justify-center w-full relative z-0 mt-15">
-        <motion.h1
-          initial={{ opacity: 0, y: -30 }}
+      {/* ── Mobile menu ── */}
+      <AnimatePresence>
+        {menuOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
+            className="fixed inset-0 z-50 flex flex-col items-center justify-center gap-8 bg-white/90 backdrop-blur-md md:hidden"
+          >
+            {NAV_LINKS.map(({ label, href }) => (
+              <a
+                key={label}
+                href={href}
+                onClick={() => setMenuOpen(false)}
+                className="text-lg font-medium text-gray-700 hover:text-gray-900 transition-colors"
+              >
+                {label}
+              </a>
+            ))}
+
+            <div className="flex flex-col items-center gap-3 mt-2 w-full px-12">
+              {!user && (
+                <Link
+                  to="/app?state=register"
+                  onClick={() => setMenuOpen(false)}
+                  className="w-full text-center px-6 py-3 rounded-full bg-[#1a1a18] text-white text-sm font-medium"
+                >
+                  Get Started
+                </Link>
+              )}
+              {!user && (
+                <Link
+                  to="/app?state=login"
+                  onClick={() => setMenuOpen(false)}
+                  className="w-full text-center px-6 py-3 rounded-full border border-gray-300 text-sm font-medium text-gray-700"
+                >
+                  Login
+                </Link>
+              )}
+              {user && (
+                <Link
+                  to="/app"
+                  onClick={() => setMenuOpen(false)}
+                  className="w-full text-center px-6 py-3 rounded-full bg-[#1a1a18] text-white text-sm font-medium"
+                >
+                  Dashboard
+                </Link>
+              )}
+            </div>
+
+            <button
+              aria-label="Close menu"
+              onClick={() => setMenuOpen(false)}
+              className="absolute top-5 right-6 p-1 text-gray-500 hover:text-gray-900 transition-colors"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* ── Hero body ── */}
+      <section className="relative z-10 flex flex-col items-center text-center px-6 mt-20 md:mt-28 max-w-3xl mx-auto w-full">
+        {/* Badge */}
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
-          className="text-4xl md:text-6xl text-gray-700 font-medium md:font-bold leading-tight"
+          transition={{ duration: 0.4, ease: "easeOut" }}
+          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-gray-200 bg-white/80 backdrop-blur-sm text-xs font-medium text-gray-500 mb-8 shadow-sm"
         >
-          Get your dream job with <br />
-          <span className="bg-linear-to-r from-purple-400 via-cyan-500 to-blue-500 bg-clip-text text-transparent font-normal">
-            AI Powered Resume
-          </span>
+          <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
+          Powered by OpenAI
+        </motion.div>
+
+        {/* Headline */}
+        <motion.h1
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.1, ease: "easeOut" }}
+          className="font-serif text-4xl md:text-5xl lg:text-[56px] font-bold text-[#1a1a18] leading-[1.12] tracking-tight mb-5"
+        >
+          Get your dream job with{" "}
+          <span className="text-blue-600">AI Powered Resume</span>
         </motion.h1>
+
+        {/* Subheading */}
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="text-lg md:text-2xl mt-6 text-gray-600"
+          transition={{ duration: 0.5, delay: 0.2, ease: "easeOut" }}
+          className="text-base md:text-lg text-gray-500 leading-relaxed max-w-md mb-10"
         >
-          Create, Edit, Download or Share your Resume within few minutes.
+          Create, edit, download or share your resume in minutes — no design
+          skills needed.
         </motion.p>
 
-        {/* CREATE & DEMO BUTTON */}
+        {/* CTA buttons */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.4, delay: 0.4 }}
-          className="flex justify-center items-center gap-5 w-full h-auto rounded-2xl mt-10"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.3, ease: "easeOut" }}
+          className="flex items-center gap-4 mb-20"
         >
           <Link
-            to="/app"
-            className="relative inline-flex items-center justify-center px-6 py-2 rounded-full text-white font-medium
-             bg-linear-to-r from-purple-400 to-blue-500
-             hover:from-cyan-600 hover:to-blue-600 transition-all duration-300 hover:scale-105 active:scale-95"
+            to="/app?state=register"
+            className="px-7 py-3 rounded-full bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700 active:scale-95 transition-all duration-200 shadow-sm"
           >
-            <span className="absolute inset-0 rounded-full p-0.5 bg-linear-to-r from-purple-500 via-cyan-500 to-blue-500 animate-glow">
-              <span className="block w-full h-full rounded-full"></span>
-            </span>
-            <span className="relative z-10">Create Now</span>
+            Create Now
           </Link>
-
-          <Link
-            to="/"
-            className="px-6 inline-flex gap-0.5 py-2 bg-white hover:bg-gray-300 transition-all duration-300 hover:scale-110 active:scale-95 rounded-full border border-gray-400 text-gray-500 hover:text-gray-700"
+          <a
+            href="#feature"
+            className="px-7 py-3 rounded-full border border-gray-300 bg-white text-gray-700 text-sm font-medium hover:border-gray-400 hover:text-gray-900 transition-all duration-200"
           >
-            <Video className="w-5 h-5 " />
-            Try Demo
-          </Link>
+            See Features →
+          </a>
         </motion.div>
 
-        {/* FAQ LINKS */}
-        <div className="space-y-4 text-center mt-8 text-slate-500 w-full max-w-2xl mx-auto px-4">
-          {faqs.map((faq, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3, delay: index * 0.1 }}
-              className="border-b border-gray-300 pb-2"
-            >
-              <p
-                className="cursor-pointer font-medium hover:text-slate-700"
-                onClick={() => setOpenIndex(openIndex === index ? null : index)}
-              >
-                {faq.question}
-              </p>
-              <AnimatePresence>
-                {openIndex === index && <Answer text={faq.answer} />}
-              </AnimatePresence>
-            </motion.div>
+        {/* Stats row */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5, delay: 0.5 }}
+          className="flex items-start gap-10 md:gap-16 border-t border-gray-200 pt-8 w-full justify-center"
+        >
+          {STATS.map(({ value, label }) => (
+            <div key={label} className="flex flex-col items-center gap-1">
+              <span className="font-serif text-xl md:text-2xl font-bold text-[#1a1a18]">
+                {value}
+              </span>
+              <span className="text-xs text-gray-400 tracking-wide">
+                {label}
+              </span>
+            </div>
           ))}
-        </div>
-      </div>
+        </motion.div>
+      </section>
     </main>
   );
 };
