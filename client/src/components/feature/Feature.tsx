@@ -42,7 +42,7 @@ const Feature = () => {
             boxShadow:
               "10px 10px 45px rgba(0,0,0,0.25), 10px 10px 40px rgba(0,0,0,0.25)",
           }}
-          src="/src/assets/feature.jpg"
+          src="feature.jpg"
           alt="Resume illustration"
         />
 

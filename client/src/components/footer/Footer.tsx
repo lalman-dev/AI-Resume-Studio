@@ -10,7 +10,7 @@ const Footer = () => {
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
       viewport={{ once: true }}
-      className="w-full bg-linear-to-b from-[#f6f1ff] via-[#F1EAFF] to-[#FFFFFF] text-gray-800"
+      className="w-full text-gray-800"
     >
       <div className="max-w-7xl mx-auto px-6 py-10 flex flex-col md:flex-row items-center justify-center md:justify-between">
         {/* Footer Links */}
@@ -77,7 +77,7 @@ const Footer = () => {
         className="border-t border-slate-200"
       >
         <div className="max-w-7xl mx-auto px-6 py-6 text-center text-sm font-normal">
-          <a href="#">AI Resume-Studio </a> © 2025. All rights reserved.
+          <a href="#">AI Resume-Studio </a> © 2026. All rights reserved.
         </div>
       </motion.div>
 
