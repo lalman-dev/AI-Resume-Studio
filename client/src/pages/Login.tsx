@@ -56,8 +56,18 @@ const Login = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-cover">
-      {/* Top/centre vignette */}
+    <div
+      className="relative flex justify-center items-center min-h-screen"
+      style={{
+        backgroundColor: "#F5F7FA",
+        backgroundImage: `
+        linear-gradient(to right, #dde3ec 1px, transparent 1px),
+        linear-gradient(to bottom, #dde3ec 1px, transparent 1px)
+      `,
+        backgroundSize: "28px 28px",
+      }}
+    >
+      {/* Centre vignette */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 z-0"
@@ -67,7 +77,7 @@ const Login = () => {
         }}
       />
 
-      {/* Bottom fade — blends grid into next section */}
+      {/* Bottom fade */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute bottom-0 left-0 right-0 z-0 h-48"
@@ -76,19 +86,21 @@ const Login = () => {
             "linear-gradient(to bottom, transparent 0%, #F5F7FA 100%)",
         }}
       />
+
+      {/* Form sits above overlays */}
       <motion.form
         onSubmit={handleSubmit}
         initial={{ opacity: 0, scale: 0.9, y: 30 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
-        className="sm:w-[350px] w-full text-center border border-gray-300/60 rounded-2xl px-8 bg-white shadow-lg"
+        className="relative z-10 sm:w-[350px] w-full text-center border border-gray-300/60 rounded-2xl px-8 bg-white shadow-lg"
       >
         {/* Title */}
         <motion.h1
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="text-gray-900 text-3xl mt-10 font-medium"
+          className="text-blue-500 text-3xl mt-10 font-medium"
         >
           {state === "login" ? "Login" : "Sign up"}
         </motion.h1>
@@ -168,7 +180,10 @@ const Login = () => {
           transition={{ duration: 0.6, delay: 0.7 }}
           className="mt-4 text-left text-purple-500"
         >
-          <button className="text-sm" type="reset">
+          <button
+            className="text-blue-500 font-medium hover:underline"
+            type="reset"
+          >
             Forget password?
           </button>
         </motion.div>
@@ -179,7 +194,7 @@ const Login = () => {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           transition={{ type: "spring", stiffness: 300 }}
-          className="mt-2 w-full h-11 rounded-full text-white bg-linear-to-r from-purple-300 to-blue-300 hover:opacity-90 transition-opacity"
+          className="mt-2 w-full h-11 rounded-full text-white bg-[#1a1a18] hover:bg-[#2d2d2b] active:scale-95 transition-all duration-200"
         >
           {state === "login" ? "Login" : "Sign up"}
         </motion.button>
@@ -197,7 +212,9 @@ const Login = () => {
           {state === "login"
             ? "Don't have an account?"
             : "Already have an account?"}{" "}
-          <span className="text-indigo-400 hover:underline">click here</span>
+          <span className="text-blue-500 font-medium hover:underline">
+            click here
+          </span>
         </motion.p>
       </motion.form>
     </div>
