@@ -8,7 +8,7 @@ const generateToken = (user) => {
   return jwt.sign(
     { userId: user._id }, // ✅ always consistent
     process.env.JWT_SECRET,
-    { expiresIn: "7d" }
+    { expiresIn: "7d" },
   );
 };
 
@@ -19,7 +19,20 @@ export const registerUser = async (req, res) => {
 
     // Basic validation
     if (!name || !email || !password) {
-      return res.status(400).json({ message: "Missing required fields" });
+      return res.status(400).json({ message: "All fields are required" });
+    }
+
+    // Password strength
+    if (password.length < 8) {
+      return res
+        .status(400)
+        .json({ message: "Password must be at least 8 characters" });
+    }
+
+    // Basic email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({ message: "Invalid email address" });
     }
 
     // Check if user already exists
