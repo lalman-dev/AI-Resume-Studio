@@ -1,28 +1,23 @@
 @import "tailwindcss";
-@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,300;1,9..40,400&family=Instrument+Serif:ital@0;1&display=swap");
+
+/* ── Global base ── */
 * {
-  font-family: "Poppins", sans-serif;
+  font-family: "DM Sans", system-ui, sans-serif;
 }
+
 body {
-  background-color: #f5f7fa;
-}
-@keyframes glow {
-  0% {
-    filter: blur(4px) brightness(0.8);
-  }
-  50% {
-    filter: blur(6px) brightness(1.5);
-  }
-  100% {
-    filter: blur(4px) brightness(0.8);
-  }
+  background-color: #d7dadf;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-.animate-glow {
-  animation: glow 2s infinite linear;
+/* ── Font utilities ── */
+.font-serif {
+  font-family: "Instrument Serif", Georgia, serif;
 }
 
-/* Screen reader only utility */
+/* ── Accessibility utilities ── */
 .sr-only {
   position: absolute;
   width: 1px;
@@ -35,7 +30,6 @@ body {
   border-width: 0;
 }
 
-/* Skip to main content — hidden until focused by keyboard */
 .skip-link {
   position: absolute;
   top: -100%;
@@ -53,4 +47,39 @@ body {
 
 .skip-link:focus {
   top: 0;
+}
+
+/* ── Print styles ── */
+@media print {
+  /* Hide everything except the resume */
+  body > * {
+    display: none !important;
+  }
+
+  /* Show only the print area */
+  #print-area,
+  #print-area * {
+    display: block !important;
+    visibility: visible !important;
+  }
+
+  #print-area {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: white;
+    padding: 0;
+    margin: 0;
+  }
+
+  /* A4 page setup */
+  @page {
+    size: A4;
+    margin: 0;
+  }
+
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
 }
