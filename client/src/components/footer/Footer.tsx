@@ -11,7 +11,7 @@ const Footer = () => {
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
       viewport={{ once: true }}
-      className="w-full text-gray-800"
+      className="w-full text-gray-800 bg-[#939598]"
     >
       <div className="max-w-7xl mx-auto px-6 py-10 flex flex-col md:flex-row items-center justify-center md:justify-between">
         {/* Footer Links */}
@@ -23,17 +23,17 @@ const Footer = () => {
             transition={{ duration: 0.6, delay: idx * 0.2 }}
             viewport={{ once: true }}
           >
-            <p className="text-slate-400 font-medium">{section.title}</p>
+            <p className="text-blue-600 font-medium">{section.title}</p>
             <ul className="mt-2 space-y-2">
               {section.links.map((link) => (
                 <li key={link.label}>
-                  <a
-                    href={link.href}
-                    className="hover:text-cyan-600 hover:underline transition"
-                  >
-                    {link.label}
+                  <a href={link.href}>
+                    <span className="hover:text-gray-600 hover:underline transition">
+                      {" "}
+                      {link.label}{" "}
+                    </span>
                     {link.badge && (
-                      <span className="text-xs text-white bg-linear-to-r from-purple-400 to-blue-400 rounded-md ml-2 px-2 py-1">
+                      <span className="text-xs text-white bg-linear-to-r from-indigo-400 to-blue-300 rounded-md ml-2 px-2 py-1 hover:underline-none">
                         {link.badge}
                       </span>
                     )}

@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 
 const Testimonial = () => {
   return (
-    <>
+    <div className="bg-[#F5F7FA]">
       {/* Badge + Title */}
       <motion.div
         id="testimonial"
@@ -22,7 +22,7 @@ const Testimonial = () => {
             duration: 2,
             ease: "easeInOut",
           }}
-          className="flex items-center gap-2 text-sm text-blue-500 bg-blue-400/10 border border-indigo-200 rounded-full px-6 py-1 mb-10"
+          className="flex items-center gap-2 text-sm text-blue-500 bg-blue-400/10 border border-indigo-200 rounded-full px-6 py-1 my-10"
         >
           <BookUserIcon className="size-5 stroke-blue-500" />
           <span>Testimonials</span>
@@ -137,7 +137,7 @@ const Testimonial = () => {
           </div>
         </motion.div>
       </motion.div>
-    </>
+    </div>
   );
 };
 
