@@ -1,37 +1,52 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { logout } from "../app/features/authSlice";
+import { LogOut } from "lucide-react";
+import Logo from "./logo";
 
 const Navbar = () => {
   const { user } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+
   const logoutUser = () => {
-    navigate("/");
     dispatch(logout());
+    navigate("/");
   };
+
   return (
-    <div className="shadow bg-white">
-      <nav className="flex items-center justify-between max-w-7xl h-15 md:h-20 mx-auto px-4 text-slate-800 transition-all">
-        <Link to="/">
-          <img src="/logo.png" alt="Ai-builder Logo" className="w-20 md:w-30" />
+    <header className="sticky top-0 z-30 bg-white border-b border-gray-100">
+      <nav
+        className="flex items-center justify-between max-w-7xl mx-auto px-6 h-14"
+        aria-label="App navigation"
+      >
+        {/* Logo */}
+        <Link to="/" aria-label="AI Resume Studio home">
+          <Logo variant="dark" size="sm" />
         </Link>
-        <div className="flex items-center gap-4 text-sm">
-          <p className="max-sm:hidden">
-            Welcome,{" "}
-            <span className="bg-linear-to-r from-purple-400 to-indigo-400 bg-clip-text text-transparent font-medium text-lg">
-              {user?.name}
-            </span>{" "}
-          </p>
+
+        {/* Right side */}
+        <div className="flex items-center gap-4">
+          {/* Welcome message */}
+          {user && (
+            <span className="hidden sm:block text-sm text-gray-500">
+              Welcome,{" "}
+              <span className="font-medium text-[#1a1a18]">{user.name}</span>
+            </span>
+          )}
+
+          {/* Logout */}
           <button
             onClick={logoutUser}
-            className="bg-white hover:bg-slate-50 border border-gray-300 px-7 py-2 rounded-full active:scale-95 transition-all"
+            aria-label="Log out"
+            className="flex items-center gap-2 px-4 py-2 rounded-full border border-gray-200 bg-white text-sm font-medium text-gray-600 hover:border-gray-400 hover:text-gray-900 active:scale-95 transition-all duration-200"
           >
-            Logout
+            <LogOut className="w-3.5 h-3.5" aria-hidden="true" />
+            <span>Logout</span>
           </button>
         </div>
       </nav>
-    </div>
+    </header>
   );
 };
 
