@@ -70,20 +70,23 @@ const Footer = () => {
       </div>
 
       {/* Copyright */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1, delay: 0.6 }}
-        viewport={{ once: true }}
-        className="border-t border-slate-200"
-      >
-        <div className="max-w-7xl mx-auto px-6 py-6 text-center text-sm font-normal">
-          <a href="#">AI Resume-Studio </a> © 2026. All rights reserved.
-        </div>
-      </motion.div>
 
-      {/* Social Links */}
-      <SocialLinks />
+      <div className="bg-[#6b6e71]">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 0.6 }}
+          viewport={{ once: true }}
+          className="border-t border-slate-200"
+        >
+          <div className="max-w-7xl mx-auto px-6 py-6 text-center text-sm font-normal">
+            <a href="#">AI Resume-Studio </a> © 2026. All rights reserved.
+          </div>
+        </motion.div>
+
+        {/* Social Links */}
+        <SocialLinks />
+      </div>
     </motion.footer>
   );
 };
