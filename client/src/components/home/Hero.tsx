@@ -103,7 +103,7 @@ const Hero = () => {
           )}
         </div>
 
-        {/* Mobile burger */}
+        {/* hamburger */}
         <button
           aria-label="Open menu"
           className="md:hidden p-1 text-gray-600 hover:text-gray-900 transition-colors"
@@ -206,8 +206,8 @@ const Hero = () => {
           transition={{ duration: 0.5, delay: 0.2, ease: "easeOut" }}
           className="text-base md:text-lg text-gray-500 leading-relaxed max-w-md mb-10"
         >
-          Create, edit, download or share your resume in minutes — no design
-          skills needed.
+          Create, edit, download or share your resume in minutes. <br />
+          No design skills needed.
         </motion.p>
 
         {/* CTA buttons */}

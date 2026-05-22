@@ -43,6 +43,8 @@ const Feature = () => {
               "10px 10px 45px rgba(0,0,0,0.25), 10px 10px 40px rgba(0,0,0,0.25)",
           }}
           src="feature.jpg"
+          loading="lazy"
+          decoding="async"
           alt="Resume illustration"
         />
 
