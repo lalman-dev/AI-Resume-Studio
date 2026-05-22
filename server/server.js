@@ -10,14 +10,28 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
-app.use(cors());
+app.use(
+  cors({
+    origin: process.env.ALLOWED_ORIGIN || "http://localhost:5173",
+    credentials: true,
+  }),
+);
 
 app.get("/", (req, res) => res.send("Server is live..."));
 app.use("/api/users", userRouter);
 app.use("/api/ai", aiRouter);
 app.use("/api/resumes", resumeRouter);
 
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-  connectDB(); // non-blocking
-});
+const start = async () => {
+  try {
+    await connectDB();
+    app.listen(PORT, () => {
+      console.log(`Server is running on port ${PORT}`);
+    });
+  } catch (error) {
+    console.error("Failed to start server:", error);
+    process.exit(1);
+  }
+};
+
+start();
