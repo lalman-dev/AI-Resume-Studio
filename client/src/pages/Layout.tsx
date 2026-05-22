@@ -16,8 +16,16 @@ const Layout = () => {
     <div>
       {user ? (
         <div className="min-h-screen bg-gray-50">
+          {/* Skip link */}
+          <a href="#main-content" className="skip-link">
+            Skip to main content
+          </a>
+
           <Navbar />
-          <Outlet />
+
+          <main id="main-content" tabIndex={-1}>
+            <Outlet />
+          </main>
         </div>
       ) : (
         <Login />
