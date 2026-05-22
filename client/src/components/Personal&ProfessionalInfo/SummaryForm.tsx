@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Loader2, Sparkles } from "lucide-react";
+import { Loader2, Sparkles, FileText } from "lucide-react";
 import { motion } from "framer-motion";
 import { useAppSelector } from "../../app/hooks";
 import api from "../../configs/api";
@@ -13,21 +13,25 @@ interface SummaryFormProps {
 
 const SummaryForm: React.FC<SummaryFormProps> = ({ data, onChange }) => {
   const { token } = useAppSelector((state) => state.auth);
-  const [isGenerating, setIsGenerating] = useState<boolean>(false);
+  const [isGenerating, setIsGenerating] = useState(false);
 
   const generateSummary = async () => {
+    if (!data.trim()) {
+      toast.error("Write a draft summary first so AI has something to enhance");
+      return;
+    }
     try {
       setIsGenerating(true);
-      const prompt = `enhance my professional summary "${data}"`;
       const response = await api.post(
         "/api/ai/enhance-pro-sum",
-        { userContent: prompt },
-        { headers: { Authorization: token } }
+        { userContent: `enhance my professional summary "${data}"` },
+        { headers: { Authorization: `Bearer ${token}` } },
       );
       onChange(response.data.enhancedContent);
-    } catch (error: unknown) {
+      toast.success("Summary enhanced");
+    } catch (error) {
       if (error instanceof AxiosError) {
-        toast.error(error.response?.data?.message || error.message);
+        toast.error(error.response?.data?.message || "AI enhancement failed");
       } else if (error instanceof Error) {
         toast.error(error.message);
       } else {
@@ -38,65 +42,75 @@ const SummaryForm: React.FC<SummaryFormProps> = ({ data, onChange }) => {
     }
   };
 
+  const charCount = data?.length ?? 0;
+
   return (
     <motion.section
-      className="space-y-4"
       aria-labelledby="summary-heading"
+      className="space-y-5"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
     >
-      {/* Heading + AI Enhance button */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h3
-            id="summary-heading"
-            className="flex items-center gap-2 text-lg font-semibold text-gray-900"
+      {/* Header */}
+      <div className="border-b border-gray-100 pb-4">
+        <div className="flex items-center justify-between">
+          <div>
+            <h3
+              id="summary-heading"
+              className="flex items-center gap-2 text-base font-semibold text-gray-900"
+            >
+              <FileText className="w-4 h-4 text-gray-400" aria-hidden="true" />
+              Professional Summary
+            </h3>
+            <p className="text-sm text-gray-500 mt-0.5">
+              A concise overview of your career highlights
+            </p>
+          </div>
+
+          <motion.button
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.97 }}
+            type="button"
+            disabled={isGenerating}
+            onClick={generateSummary}
+            aria-label="Enhance summary with AI"
+            className="flex items-center gap-2 px-3 py-1.5 text-xs font-medium bg-[#1a1a18] text-white rounded-lg hover:bg-[#2d2d2b] disabled:opacity-50 transition-all"
           >
-            Professional Summary
-          </h3>
-          <p className="text-sm text-gray-500">
-            Provide a concise overview of your career highlights
-          </p>
+            {isGenerating ? (
+              <Loader2 className="w-3 h-3 animate-spin" aria-hidden="true" />
+            ) : (
+              <Sparkles className="w-3 h-3" aria-hidden="true" />
+            )}
+            {isGenerating ? "Enhancing..." : "AI Enhance"}
+          </motion.button>
         </div>
-        <motion.button
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          type="button"
-          className="flex items-center gap-2 px-3 py-1 text-sm bg-purple-100 text-purple-700 rounded hover:bg-purple-200 transition-colors disabled:opacity-50"
-          aria-label="Enhance summary with AI"
-          disabled={isGenerating}
-          onClick={generateSummary}
-        >
-          {isGenerating ? (
-            <Loader2 className="size-4 animate-spin" />
-          ) : (
-            <Sparkles className="size-4" aria-hidden="true" />
-          )}
-          {isGenerating ? "Enhancing..." : "AI Enhance"}
-        </motion.button>
       </div>
 
       {/* Textarea */}
-      <div>
+      <div className="space-y-2">
         <label htmlFor="summary-textarea" className="sr-only">
           Professional Summary
         </label>
-        <motion.textarea
+        <textarea
           id="summary-textarea"
-          value={data || ""}
+          value={data ?? ""}
           onChange={(e) => onChange(e.target.value)}
           rows={7}
-          className="w-full p-3 px-4 mt-2 border text-sm border-gray-300 rounded-lg focus:ring focus:ring-indigo-500 focus:border-blue-500 outline-none transition-colors resize-none"
-          placeholder="Craft a powerful professional summary that showcases your core strengths, unique value, and career aspirations..."
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.3, delay: 0.1 }}
+          placeholder="e.g. Frontend engineer with 3+ years building scalable React applications. Passionate about clean UI, performance, and developer experience..."
+          className="w-full px-4 py-3 text-sm border border-gray-200 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none transition-all placeholder:text-gray-300"
         />
-        <p className=" text-xs text-center max-w-4/5 mx-auto text-gray-500 italic">
-          Guideline: Keep your summary concise (around 3 to 4 sentences) and
-          emphasize your most impactful skills and accomplishments.
-        </p>
+        <div className="flex items-center justify-between">
+          <p className="text-xs text-gray-400 italic">
+            Aim for 3–4 sentences. Lead with your role, then skills, then
+            impact.
+          </p>
+          <span
+            className={`text-xs tabular-nums ${charCount > 600 ? "text-red-400" : "text-gray-400"}`}
+          >
+            {charCount} chars
+          </span>
+        </div>
       </div>
     </motion.section>
   );
