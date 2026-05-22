@@ -184,7 +184,7 @@ const Hero = () => {
           transition={{ duration: 0.4, ease: "easeOut" }}
           className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-gray-200 bg-white/80 backdrop-blur-sm text-xs font-medium text-gray-500 mb-8 shadow-sm"
         >
-          <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
+          <span className="w-2 h-2 rounded-full bg-blue-500" />
           Powered by OpenAI
         </motion.div>
 
