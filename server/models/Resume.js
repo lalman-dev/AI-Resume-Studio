@@ -2,11 +2,15 @@ import mongoose from "mongoose";
 
 const ResumeSchema = new mongoose.Schema(
   {
-    userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
     title: { type: String, default: "Untitled Resume" },
     public: { type: Boolean, default: false },
     template: { type: String, default: "classic" },
-    accent_color: { type: String, default: "#3B82F6" }, // ✅ fixed typo
+    accent_color: { type: String, default: "#3B82F6" },
     professional_summary: { type: String, default: "" },
     skills: [{ type: String }],
     personal_info: {
@@ -26,7 +30,7 @@ const ResumeSchema = new mongoose.Schema(
         start_date: { type: String },
         end_date: { type: String },
         description: { type: String },
-        is_current: { type: Boolean },
+        is_current: { type: Boolean, default: false },
       },
     ],
     project: [
@@ -34,6 +38,7 @@ const ResumeSchema = new mongoose.Schema(
         name: { type: String },
         type: { type: String },
         description: { type: String },
+        link: { type: String, default: "" },
       },
     ],
     education: [
@@ -46,7 +51,7 @@ const ResumeSchema = new mongoose.Schema(
       },
     ],
   },
-  { timestamps: true, minimize: false }
+  { timestamps: true, minimize: false },
 );
 
 const Resume = mongoose.model("Resume", ResumeSchema);
