@@ -19,19 +19,20 @@ app.use(
 );
 
 app.get("/", (req, res) => res.send("Server is live..."));
+
 app.use("/api/users", userRouter);
-app.use("/api/ai", aiLimiter);
-app.use("/api/ai", aiRouter);
+app.use("/api/ai", aiLimiter, aiRouter);
 app.use("/api/resumes", resumeRouter);
 
+// Start server only after DB is ready
 const start = async () => {
   try {
     await connectDB();
     app.listen(PORT, () => {
-      console.log(`Server is running on port ${PORT}`);
+      console.log(`Server running on port ${PORT}`);
     });
   } catch (error) {
-    console.error("Failed to start server:", error);
+    console.error("Failed to start server:", error.message);
     process.exit(1);
   }
 };
